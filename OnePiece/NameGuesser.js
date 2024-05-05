@@ -51,6 +51,11 @@ const NameGuesser = () => {
       return;
     }
   
+    if (!guess.trim()) {
+      setMessage('Please enter a guess.');
+      return;
+    }
+  
     const guessedWord = guess.trim().toLowerCase();
     const characterWords = character.name.toLowerCase().split(' ');
     const correctGuess = characterWords.some(word => word.includes(guessedWord));
@@ -58,14 +63,13 @@ const NameGuesser = () => {
     if (correctGuess) {
       setMessage('Congratulations! You guessed the character!');
       setScore(score + 1);
-      setHintDisplayed(false); 
+      setHintDisplayed(false);
       generateHint();
     } else {
       setMessage('Sorry! Wrong guess. Try again.');
     }
     setGuess('');
-  };
-  
+  };  
 
   const restartGame = () => {
     setTimeLeft(60);
@@ -82,9 +86,6 @@ const NameGuesser = () => {
         <Text style={styles.title}>Guess that Strawhat</Text>
         <Text style={styles.score}>Score: {score}</Text>
         {!gameOver && <Text style={styles.timer}>Time Left: {timeLeft} seconds</Text>}
-        <TouchableOpacity style={styles.button} onPress={generateHint} disabled={gameOver || hintDisplayed}>
-          <Text style={styles.buttonText}>Refresh Hint</Text>
-        </TouchableOpacity>
         <Text style={styles.hint}>{hint}</Text>
         {!gameOver && (
           <>
