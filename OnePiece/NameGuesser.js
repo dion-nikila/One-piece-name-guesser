@@ -26,15 +26,28 @@ const NameGuesser = () => {
       setMessage('Please generate a hint first.');
       return;
     }
-
-    if (guess.toLowerCase().includes(character.name.toLowerCase())) {
+  
+    if (!guess.trim()) {
+      setMessage('Please enter a guess.');
+      return;
+    }
+  
+    const guessedWord = guess.trim().toLowerCase();
+    const characterWords = character.name.toLowerCase().split(' ');
+    const correctGuess = characterWords.some(word => word.includes(guessedWord));
+  
+    if (correctGuess) {
       setMessage('Congratulations! You guessed the character!');
+      setScore(score + 1);
+      setHintDisplayed(false);
+      generateHint();
     } else {
       setMessage('Sorry! Wrong guess. Try again.');
     }
     setGuess('');
   };
-
+  
+  
   const refreshHint = () => {
     generateHint();
     setMessage('');
@@ -45,9 +58,6 @@ const NameGuesser = () => {
       <View style={styles.container}>
         <Image source={require('./onePieceLogo.png')} style={styles.logo} />
         <Text style={styles.title}>Guess that Strawhat</Text>
-        <TouchableOpacity style={styles.button} onPress={refreshHint}>
-          <Text style={styles.buttonText}>Refresh Hint</Text>
-        </TouchableOpacity>
         <Text style={styles.hint}>{hint}</Text>
         <TextInput
           style={styles.input}
